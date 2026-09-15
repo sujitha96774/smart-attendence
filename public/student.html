@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Attendance Scanner | Smart QR</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- HTML5 QR Code Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <style>
+    .scanner-wrapper {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    #reader {
+      width: 100%;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 2px solid var(--border-color);
+      background: #000;
+    }
+    #reader video {
+      object-fit: cover;
+      border-radius: var(--radius-lg);
+    }
+    .status-panel {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .status-panel.success {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid #10b981;
+    }
+    .status-panel.error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+    }
+    .status-icon {
+      font-size: 3rem;
+      margin-bottom: 0.75rem;
+    }
+    .tab-group {
+      display: flex;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem 1rem;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <i class="fa-solid fa-qrcode" style="color: #6366f1;"></i>
+      <span>Smart Attendance</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="teacher.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+      <a href="student.html" class="nav-link active"><i class="fa-solid fa-camera"></i> Student Scan</a>
+      <a href="kiosk.html" class="nav-link"><i class="fa-solid fa-id-badge"></i> Kiosk</a>
+      <a href="badges.html" class="nav-link"><i class="fa-solid fa-id-card"></i> Badges</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    
+    <div class="scanner-wrapper">
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <i class="fa-solid fa-camera" style="color: #10b981;"></i> Student Attendance Scanner
+          </div>
+          <span class="badge badge-info" id="sessionIndicator">Checking...</span>
+        </div>
+
+        <!-- Student Identification -->
+        <div class="form-group">
+          <label class="form-label">Select Your Name / Roll Number</label>
+          <select id="studentSelect" class="form-select">
+            <option value="">-- Choose your student profile --</option>
+          </select>
+        </div>
+
+        <!-- Scanner Mode Tabs -->
+        <div class="tab-group">
+          <button class="tab-btn active" id="tabCamera"><i class="fa-solid fa-camera"></i> Camera Scanner</button>
+          <button class="tab-btn" id="tabManual"><i class="fa-solid fa-keyboard"></i> Direct / Test Input</button>
+        </div>
+
+        <!-- Camera Scanner Section -->
+        <div id="cameraView">
+          <div style="position: relative;">
+            <div id="reader"></div>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+            <button id="btnStartCamera" class="btn btn-primary" style="flex: 1;">
+              <i class="fa-solid fa-video"></i> Start Camera
+            </button>
+            <button id="btnStopCamera" class="btn btn-outline" style="display: none;">
+              <i class="fa-solid fa-video-slash"></i> Stop
+            </button>
+          </div>
+        </div>
+
+        <!-- Direct / Manual Test Section (Great for Demos without camera) -->
+        <div id="manualView" style="display: none;">
+          <div class="form-group">
+            <label class="form-label">QR Token Payload or Quick Scan</label>
+            <input type="text" id="manualQrInput" class="form-control" placeholder="Paste SMART_ATTENDANCE:... token">
+          </div>
+          <div style="display: flex; gap: 0.75rem;">
+            <button id="btnSubmitManual" class="btn btn-primary" style="flex: 1;">
+              <i class="fa-solid fa-check"></i> Submit Token
+            </button>
+            <button id="btnSimulateScan" class="btn btn-success" style="flex: 1;" title="Simulate real-time scan of active classroom QR">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> 1-Click Scan Active QR
+            </button>
+          </div>
+        </div>
+
+        <!-- Feedback Result Panel -->
+        <div id="statusPanel" class="status-panel">
+          <div id="statusIcon" class="status-icon">✅</div>
+          <h3 id="statusTitle" style="margin-bottom: 0.5rem; color: #fff;">Attendance Marked!</h3>
+          <p id="statusDesc" style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1rem;">
+            Your attendance has been recorded in the database.
+          </p>
+          <div id="statusDetails" style="background: rgba(0,0,0,0.25); border-radius: var(--radius-md); padding: 0.75rem; font-size: 0.88rem; text-align: left;">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    Smart QR Attendance System &copy; Student Mobile Client
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/student.js"></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+{
+  "students": [
+    {
+      "id": "1",
+      "rollNo": "CS2101",
+      "name": "Srihariharan R",
+      "department": "Computer Science",
+      "email": "srihariharan@univ.edu"
+    },
+    {
+      "id": "2",
+      "rollNo": "CS2102",
+      "name": "Priya Sharma",
+      "department": "Computer Science",
+      "email": "priya.s@univ.edu"
+    },
+    {
+      "id": "3",
+      "rollNo": "CS2103",
+      "name": "Rahul Verma",
+      "department": "Information Technology",
+      "email": "rahul.v@univ.edu"
+    },
+    {
+      "id": "4",
+      "rollNo": "CS2104",
+      "name": "Ananya Iyer",
+      "department": "Computer Science",
+      "email": "ananya.i@univ.edu"
+    },
+    {
+      "id": "5",
+      "rollNo": "CS2105",
+      "name": "Karthik Raja",
+      "department": "Information Technology",
+      "email": "karthik.r@univ.edu"
+    },
+    {
+      "id": "6",
+      "rollNo": "CS2106",
+      "name": "Sneha Patel",
+      "department": "Electronics & Comm",
+      "email": "sneha.p@univ.edu"
+    },
+    {
+      "id": "7",
+      "rollNo": "CS2107",
+      "name": "Mohammed Zaid",
+      "department": "Computer Science",
+      "email": "zaid.m@univ.edu"
+    },
+    {
+      "id": "8",
+      "rollNo": "CS2108",
+      "name": "Divya Nair",
+      "department": "Artificial Intelligence",
+      "email": "divya.n@univ.edu"
+    }
+  ],
+  "courses": [
+    {
+      "id": "c1",
+      "code": "CS301",
+      "name": "Web Technologies & Cloud",
+      "faculty": "Dr. Ramesh Kumar",
+      "room": "Lab 4"
+    },
+    {
+      "id": "c2",
+      "code": "CS302",
+      "name": "Data Structures & Algorithms",
+      "faculty": "Prof. Anitha Sundar",
+      "room": "Hall 201"
+    },
+    {
+      "id": "c3",
+      "code": "CS303",
+      "name": "Database Management Systems",
+      "faculty": "Dr. Rajesh Sen",
+      "room": "Lab 2"
+    },
+    {
+      "id": "c4",
+      "code": "CS304",
+      "name": "Artificial Intelligence & ML",
+      "faculty": "Prof. Meenakshi V",
+      "room": "Seminar Hall"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "sess_1789484076410",
+      "courseId": "c1",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "faculty": "Dr. Ramesh Kumar",
+      "room": "Lab 4",
+      "date": "2026-09-15",
+      "startTime": "08:24 pm",
+      "createdAt": "2026-09-15T14:54:36.410Z",
+      "durationMinutes": 60,
+      "active": false,
+      "secretKey": "c1a1b2ab634d3bb787421e6ebb3e9764",
+      "endedAt": "2026-09-15T14:54:36.587Z"
+    },
+    {
+      "id": "sess_1789484143711",
+      "courseId": "c1",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "faculty": "Dr. Ramesh Kumar",
+      "room": "Lab 4",
+      "date": "2026-09-15",
+      "startTime": "08:25 pm",
+      "createdAt": "2026-09-15T14:55:43.711Z",
+      "durationMinutes": 45,
+      "active": false,
+      "secretKey": "91f776f3c5dea9028c0bac82c020c1e6",
+      "endedAt": "2026-09-15T14:55:52.705Z"
+    },
+    {
+      "id": "sess_1789485255969",
+      "courseId": "c1",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "faculty": "Dr. Ramesh Kumar",
+      "room": "Lab 4",
+      "date": "2026-09-15",
+      "startTime": "08:44 pm",
+      "createdAt": "2026-09-15T15:14:15.969Z",
+      "durationMinutes": 60,
+      "active": false,
+      "secretKey": "f72ae878e4e87f290c9f37b22f3d4133",
+      "endedAt": "2026-09-15T15:14:16.081Z"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "att_1789484076563_7z3s",
+      "sessionId": "sess_1789484076410",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "studentRollNo": "CS2101",
+      "studentName": "Srihariharan R",
+      "department": "Computer Science",
+      "timestamp": "2026-09-15T14:54:36.563Z",
+      "timeFormatted": "08:24:36 pm",
+      "date": "2026-09-15",
+      "status": "Present",
+      "method": "Dynamic QR"
+    },
+    {
+      "id": "att_1789484076567_s7sq",
+      "sessionId": "sess_1789484076410",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "studentRollNo": "CS2102",
+      "studentName": "Priya Sharma",
+      "department": "Computer Science",
+      "timestamp": "2026-09-15T14:54:36.567Z",
+      "timeFormatted": "08:24:36 pm",
+      "date": "2026-09-15",
+      "status": "Present",
+      "method": "Student ID Badge"
+    },
+    {
+      "id": "att_1789485256070_wg9a",
+      "sessionId": "sess_1789485255969",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "studentRollNo": "CS2101",
+      "studentName": "Srihariharan R",
+      "department": "Computer Science",
+      "timestamp": "2026-09-15T15:14:16.070Z",
+      "timeFormatted": "08:44:16 pm",
+      "date": "2026-09-15",
+      "status": "Present",
+      "method": "Dynamic QR"
+    },
+    {
+      "id": "att_1789485256077_q548",
+      "sessionId": "sess_1789485255969",
+      "courseCode": "CS301",
+      "courseName": "Web Technologies & Cloud",
+      "studentRollNo": "CS2102",
+      "studentName": "Priya Sharma",
+      "department": "Computer Science",
+      "timestamp": "2026-09-15T15:14:16.077Z",
+      "timeFormatted": "08:44:16 pm",
+      "date": "2026-09-15",
+      "status": "Present",
+      "method": "Student ID Badge"
+    }
+  ]
+}

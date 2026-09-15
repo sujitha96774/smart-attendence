@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student QR ID Badges | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+    .id-card {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+    .id-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--primary);
+    }
+    .id-card-header {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      padding: 0.85rem 1rem;
+      text-align: center;
+      color: #fff;
+    }
+    .id-card-header h4 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+    .id-card-header span {
+      font-size: 0.7rem;
+      opacity: 0.85;
+    }
+    .id-card-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .student-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.75rem;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+    .id-qr-box {
+      background: #ffffff;
+      padding: 0.6rem;
+      border-radius: var(--radius-md);
+      margin: 1rem 0;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    .id-qr-box img {
+      width: 140px;
+      height: 140px;
+      display: block;
+    }
+    @media print {
+      body {
+        background: #fff;
+        color: #000;
+      }
+      .navbar, .footer, .no-print {
+        display: none !important;
+      }
+      .badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+      }
+      .id-card {
+        page-break-inside: avoid;
+        border: 2px solid #000;
+        background: #fff;
+        color: #000;
+      }
+      .id-card-header {
+        background: #1e293b !important;
+        -webkit-print-color-adjust: exact;
+      }
+      .id-card * {
+        color: #000 !important;
+      }
+      .id-card-header * {
+        color: #fff !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <i class="fa-solid fa-qrcode" style="color: #6366f1;"></i>
+      <span>Smart Attendance</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="teacher.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+      <a href="student.html" class="nav-link"><i class="fa-solid fa-camera"></i> Student Scan</a>
+      <a href="kiosk.html" class="nav-link"><i class="fa-solid fa-id-badge"></i> Kiosk</a>
+      <a href="badges.html" class="nav-link active"><i class="fa-solid fa-id-card"></i> Badges</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    
+    <div class="card-header no-print" style="margin-bottom: 1.5rem;">
+      <div>
+        <h2 style="font-size: 1.6rem; color: #fff;">Printable Student QR ID Cards</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
+          Each card includes a secure verification QR code scanned in Kiosk Mode or Faculty Check-in.
+        </p>
+      </div>
+      <button class="btn btn-primary" onclick="window.print()">
+        <i class="fa-solid fa-print"></i> Print ID Cards
+      </button>
+    </div>
+
+    <!-- Badges Grid Container -->
+    <div class="badges-grid" id="badgesContainer">
+      <div style="text-align: center; color: var(--text-muted); padding: 3rem; grid-column: 1 / -1;">
+        Loading student badges...
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    Smart QR Attendance System &copy; Printable Badges
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script src="js/badges.js"></script>
+</body>
+</html>

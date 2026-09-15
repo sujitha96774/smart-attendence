@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Classroom QR Display | Smart Attendance</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 30%, #1e1b4b 0%, #0f172a 100%);
+    }
+    .live-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media (max-width: 950px) {
+      .live-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+    .qr-hero-card {
+      background: rgba(30, 41, 59, 0.9);
+      border: 2px solid rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 35px rgba(79, 70, 229, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+    .qr-image-wrapper {
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      display: inline-block;
+      margin: 1.5rem 0 1rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transition: transform 0.2s ease;
+    }
+    .qr-image-wrapper img {
+      display: block;
+      width: 320px;
+      height: 320px;
+      max-width: 80vw;
+      max-height: 80vw;
+      object-fit: contain;
+    }
+    .countdown-bar-container {
+      width: 100%;
+      max-width: 340px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      margin: 1rem auto 0.5rem;
+      overflow: hidden;
+    }
+    .countdown-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      border-radius: 999px;
+      transition: width 1s linear;
+    }
+    .anti-proxy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .feed-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: var(--radius-md);
+      margin-bottom: 0.6rem;
+      animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <i class="fa-solid fa-qrcode" style="color: #6366f1;"></i>
+      <span>Classroom Live Projector</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button class="btn btn-outline btn-sm" id="btnToggleFullscreen">
+        <i class="fa-solid fa-expand"></i> Fullscreen
+      </button>
+      <a href="teacher.html" class="btn btn-outline btn-sm">
+        <i class="fa-solid fa-arrow-left"></i> Faculty Panel
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- When No Active Session -->
+    <div id="noSessionMessage" class="card" style="text-align: center; padding: 4rem 2rem; display: none;">
+      <i class="fa-solid fa-circle-exclamation" style="font-size: 3.5rem; color: #fbbf24; margin-bottom: 1.5rem;"></i>
+      <h2 style="margin-bottom: 0.75rem;">No Active Attendance Session Found</h2>
+      <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem;">
+        Please go to the Faculty Dashboard and start a session for your class. Once started, the live dynamic QR code will appear here.
+      </p>
+      <a href="teacher.html" class="btn btn-primary">Go to Faculty Dashboard</a>
+    </div>
+
+    <!-- Active Live Session Layout -->
+    <div id="activeSessionLayout" class="live-layout">
+      
+      <!-- Left: Dynamic QR Hero View -->
+      <div class="qr-hero-card">
+        <div>
+          <div class="anti-proxy-pill">
+            <i class="fa-solid fa-shield-halved"></i> Anti-Proxy Protection Active
+          </div>
+          <h2 style="font-size: 1.8rem; margin: 0.75rem 0 0.25rem;" id="liveCourseName">Loading Course...</h2>
+          <div style="color: var(--text-muted); font-size: 0.95rem;" id="liveCourseMeta">Faculty: - | Room: -</div>
+        </div>
+
+        <!-- QR Code Canvas / Image -->
+        <div class="qr-image-wrapper">
+          <img id="dynamicQrImg" alt="Dynamic QR Code" src="" />
+        </div>
+
+        <!-- Timer / Refresh Progress -->
+        <div class="countdown-bar-container">
+          <div id="countdownBar" class="countdown-bar"></div>
+        </div>
+        <div class="timer-ring-container">
+          <i class="fa-solid fa-arrows-rotate fa-spin" style="color: #818cf8;"></i>
+          <span>QR code rotates in:</span>
+          <span class="timer-badge" id="countdownSeconds">10s</span>
+        </div>
+
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 1rem;">
+          Students: Open <strong>Student Scanner</strong> on your phone and scan the code above. Code expires automatically every 10 seconds!
+        </p>
+      </div>
+
+      <!-- Right: Real-time Attendance Feed -->
+      <div class="card" style="display: flex; flex-direction: column; height: 100%;">
+        <div class="card-header">
+          <div>
+            <div class="card-title"><i class="fa-solid fa-users" style="color: #34d399;"></i> Real-Time Check-Ins</div>
+            <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.2rem;">Live updates via instant polling</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.8rem; font-weight: 800; color: #34d399;" id="livePresentCount">0</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Students Present</div>
+          </div>
+        </div>
+
+        <!-- Progress Percentage Bar -->
+        <div style="margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.35rem;">
+            <span>Class Turnout</span>
+            <span id="turnoutPercent" style="font-weight: 700; color: #fff;">0%</span>
+          </div>
+          <div style="height: 8px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden;">
+            <div id="turnoutBar" style="height: 100%; width: 0%; background: #34d399; border-radius: 999px; transition: width 0.4s ease;"></div>
+          </div>
+        </div>
+
+        <!-- Student Stream Feed -->
+        <div id="studentFeedList" style="flex: 1; max-height: 440px; overflow-y: auto; padding-right: 0.25rem;">
+          <div style="text-align: center; color: var(--text-muted); padding: 3rem 1rem;">
+            <i class="fa-solid fa-camera fa-fade" style="font-size: 2rem; margin-bottom: 0.75rem; display: block;"></i>
+            Awaiting student scans...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script src="js/common.js"></script>
+  <script src="js/live_session.js"></script>
+</body>
+</html>

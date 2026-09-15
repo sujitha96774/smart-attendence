@@ -1,0 +1,25 @@
+{
+  "name": "smart-qr-attendance",
+  "version": "1.0.0",
+  "description": "Smart Attendance System via Dynamic QR Code using JavaScript and Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "qr-code",
+    "attendance",
+    "smart-campus",
+    "express",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "qrcode": "^1.5.3",
+    "xlsx": "^0.18.5"
+  }
+}

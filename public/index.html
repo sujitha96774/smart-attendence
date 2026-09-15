@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Attendance System | Dynamic QR Code</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hero-section {
+      text-align: center;
+      padding: 3rem 1rem 2rem;
+    }
+    .hero-title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 650px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.6;
+    }
+    .grid-portal {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .portal-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .portal-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+    .portal-card:hover::before {
+      opacity: 1;
+    }
+    .portal-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .portal-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+    .portal-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+    .badge-feature {
+      background: rgba(255, 255, 255, 0.08);
+      color: #cbd5e1;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .active-session-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 95, 70, 0.25));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.75rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <i class="fa-solid fa-qrcode" style="color: #6366f1;"></i>
+      <span>Smart Attendance</span>
+    </div>
+    <nav class="nav-links">
+      <a href="index.html" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a>
+      <a href="teacher.html" class="nav-link"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+      <a href="student.html" class="nav-link"><i class="fa-solid fa-camera"></i> Student Scan</a>
+      <a href="kiosk.html" class="nav-link"><i class="fa-solid fa-id-badge"></i> Kiosk Mode</a>
+      <a href="badges.html" class="nav-link"><i class="fa-solid fa-id-card"></i> Student Badges</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container">
+    
+    <!-- Hero Banner -->
+    <section class="hero-section">
+      <div class="badge-feature"><i class="fa-solid fa-shield-halved"></i> ANTI-PROXY DYNAMIC QR ENCRYPTION</div>
+      <h1 class="hero-title">Smart Attendance via QR Code</h1>
+      <p class="hero-subtitle">
+        Automated, contactless, and fraud-resistant attendance logging. Featuring time-rotating dynamic QR tokens, smartphone camera scanning, and instant Excel reports.
+      </p>
+    </section>
+
+    <!-- Dynamic Active Session Alert -->
+    <div id="activeSessionBanner" class="active-session-banner" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <span style="font-size: 1.8rem; color: #34d399;"><i class="fa-solid fa-circle-dot fa-beat-fade"></i></span>
+        <div>
+          <div style="font-weight: 700; color: #fff; font-size: 1.1rem;" id="bannerCourseName">Active Session in Progress</div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;" id="bannerSessionDetails">Room 101 | 0 students marked</div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="live_session.html" class="btn btn-primary btn-sm"><i class="fa-solid fa-desktop"></i> Open Live QR Screen</a>
+        <a href="student.html" class="btn btn-success btn-sm"><i class="fa-solid fa-qrcode"></i> Scan Attendance</a>
+      </div>
+    </div>
+
+    <!-- Portals Grid -->
+    <div class="grid-portal">
+
+      <!-- Faculty Portal -->
+      <div class="portal-card">
+        <div class="portal-icon" style="background: rgba(99, 102, 241, 0.15); color: #818cf8;">
+          <i class="fa-solid fa-chalkboard-user"></i>
+        </div>
+        <h3>Faculty Dashboard</h3>
+        <p>Create attendance sessions, manage courses, track live headcounts, and export professional Excel/CSV reports.</p>
+        <a href="teacher.html" class="btn btn-primary" style="width: 100%;">
+          Launch Dashboard <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Live Screen Projector -->
+      <div class="portal-card">
+        <div class="portal-icon" style="background: rgba(14, 165, 233, 0.15); color: #38bdf8;">
+          <i class="fa-solid fa-desktop"></i>
+        </div>
+        <h3>Live Projector Display</h3>
+        <p>Display the anti-proxy dynamic QR code on the classroom projector with real-time 10-second token rotation and live ticker.</p>
+        <a href="live_session.html" class="btn btn-outline" style="width: 100%;">
+          Open Projector View <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Student Mobile Scanner -->
+      <div class="portal-card">
+        <div class="portal-icon" style="background: rgba(16, 185, 129, 0.15); color: #34d399;">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <h3>Student Scanner</h3>
+        <p>Students use their phone or laptop camera to scan the dynamic classroom QR code and instantly register their attendance.</p>
+        <a href="student.html" class="btn btn-success" style="width: 100%;">
+          Scan Attendance <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Kiosk Mode -->
+      <div class="portal-card">
+        <div class="portal-icon" style="background: rgba(245, 158, 11, 0.15); color: #fbbf24;">
+          <i class="fa-solid fa-barcode"></i>
+        </div>
+        <h3>Kiosk Scanner Mode</h3>
+        <p>Classroom entry checkpoint: laptop webcam continuously scans student ID badges as they enter the hall.</p>
+        <a href="kiosk.html" class="btn btn-outline" style="width: 100%;">
+          Launch Kiosk Mode <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Printable ID Badges -->
+      <div class="portal-card">
+        <div class="portal-icon" style="background: rgba(236, 72, 153, 0.15); color: #f472b6;">
+          <i class="fa-solid fa-id-card"></i>
+        </div>
+        <h3>Student QR Badges</h3>
+        <p>Browse the student roster and generate high-resolution, printable student ID cards embedded with individual QR codes.</p>
+        <a href="badges.html" class="btn btn-outline" style="width: 100%;">
+          Generate Badges <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    Smart QR Attendance System &copy; Mini Project | Node.js & JavaScript
+  </footer>
+
+  <script src="js/common.js"></script>
+  <script>
+    // Check if an active session exists
+    async function checkActiveSession() {
+      try {
+        const data = await apiFetch('/api/session/active');
+        const banner = document.getElementById('activeSessionBanner');
+        if (data.active && data.session) {
+          banner.style.display = 'flex';
+          document.getElementById('bannerCourseName').textContent = 
+            `Live Session: ${data.session.courseCode} - ${data.session.courseName}`;
+          document.getElementById('bannerSessionDetails').textContent = 
+            `Faculty: ${data.session.faculty} | Room: ${data.session.room} | Marked: ${data.attendanceCount} students`;
+        } else {
+          banner.style.display = 'none';
+        }
+      } catch (e) {
+        console.log('No active session or server starting', e);
+      }
+    }
+    checkActiveSession();
+    setInterval(checkActiveSession, 6000);
+  </script>
+</body>
+</html>
